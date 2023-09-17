@@ -1,24 +1,13 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
+	"github.com/umizu/yomu/internal/handlers"
 )
 
 func NewRouter() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", indexHandler)
-	mux.HandleFunc("/api/data", apiDataHandler)
-
+	mux.HandleFunc("/books", handlers.BookHandler)
 	return mux
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Home...")
-}
-
-func apiDataHandler(w http.ResponseWriter, r *http.Request) {
-	data := "Some data..."
-	fmt.Fprintln(w, data)
 }
