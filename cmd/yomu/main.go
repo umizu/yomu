@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/umizu/yomu/internal/routes"
+	"log"
 	"net/http"
+
+	"github.com/umizu/yomu/internal/routes"
 )
 
 func main() {
@@ -11,9 +13,7 @@ func main() {
 
 	port := 8080
 	addr := fmt.Sprintf(":%d", port)
+
 	fmt.Printf("Server listening on http://localhost%s\n", addr)
-	err := http.ListenAndServe(addr, router)
-	if err != nil {
-		panic(err)
-	}
+	log.Fatal(http.ListenAndServe(addr, router))
 }

@@ -2,12 +2,14 @@ package routes
 
 import (
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 	"github.com/umizu/yomu/internal/handlers"
 )
 
 func NewRouter() http.Handler {
-	mux := http.NewServeMux()
+	router := httprouter.New()
 
-	mux.HandleFunc("/books", handlers.BookHandler)
-	return mux
+	router.GET("/books", handlers.GetBooksHandler)
+	return router
 }
