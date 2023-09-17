@@ -1,19 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-
-	"github.com/umizu/yomu/internal/routes"
+	"github.com/umizu/yomu/internal/api"
 )
 
 func main() {
-	router := routes.NewRouter()
-
-	port := 8080
-	addr := fmt.Sprintf(":%d", port)
-
-	fmt.Printf("Server listening on http://localhost%s\n", addr)
-	log.Fatal(http.ListenAndServe(addr, router))
+	server := api.NewAPIServer(":8080")
+	server.Run()
 }
