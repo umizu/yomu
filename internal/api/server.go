@@ -35,7 +35,6 @@ func NewAPIServer(listenAddr string) (*APIServer, error) {
 
 func (s *APIServer) Run() {
 	s.RegisterBookRoutes()
-
 	fmt.Printf("Server listening on http://localhost%s\n", s.listenAddr)
 	log.Fatal(http.ListenAndServe(s.listenAddr, s.router))
 }

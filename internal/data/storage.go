@@ -10,6 +10,7 @@ import (
 type Store interface {
 	CreateBook(*models.Book) error
 	GetBookById(id string) (*models.Book, error)
+	GetAllBooks() ([]*models.Book, error)
 }
 
 type PostgresStore struct {
@@ -56,4 +57,29 @@ func (s *PostgresStore) GetBookById(id string) (*models.Book, error) {
 	}
 
 	return &book, nil
+}
+
+func (s *PostgresStore) GetAllBooks() ([]*models.Book, error) {
+	rows, err := s.db.Query(`
+		SELECT id, title, mediaType, length
+		FROM book
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var books []*models.Book
+
+	for rows.Next() {
+		var book models.Book
+
+		if err := rows.Scan(&book.Id, &book.Title, &book.MediaType, &book.Length); err != nil {
+			return nil, err
+		}
+
+		books = append(books, &book)
+	}
+
+	return books, nil
 }

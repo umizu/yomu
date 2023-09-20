@@ -1,8 +1,18 @@
 package api
 
-import "github.com/umizu/yomu/internal/handlers"
+import (
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/umizu/yomu/internal/handlers"
+)
 
 func (s *APIServer) RegisterBookRoutes() {
-	s.router.GET("/books", handlers.BooksGETHandler)
-	s.router.POST("/books", handlers.BooksPOSTHandler)
+	s.router.GET("/books", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		handlers.BooksGETHandler(w, r, p, s.db)
+	})
+	
+	s.router.POST("/books", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		handlers.BooksPOSTHandler(w, r, p, s.db)
+	})
 }
