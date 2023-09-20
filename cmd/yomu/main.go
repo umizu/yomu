@@ -5,6 +5,10 @@ import (
 )
 
 func main() {
-	server := api.NewAPIServer(":8080")
+	server, err := api.NewAPIServer(":8080")
+	if err != nil {
+		panic(err)
+	}
+
 	server.Run()
 }

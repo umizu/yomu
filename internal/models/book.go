@@ -5,15 +5,17 @@ import (
 )
 
 type Book struct {
-	Id    string `json:"id"`
-	Title string `json:"title"`
-	Pages int    `json:"pages"`
+	Id        string `json:"id"`
+	Title     string `json:"title"`
+	MediaType string `json:"mediaType"`
+	Length    int    `json:"length"`
 }
 
-func NewBook(title string, pages int) *Book {
+func NewBook(title string, mediaType string, length int) *Book {
 	return &Book{
-		Id:    uuid.NewString(),
-		Title: title,
-		Pages: pages,
+		Id:        uuid.NewString(),
+		Title:     title,
+		MediaType: mediaType,
+		Length:    length,
 	}
 }

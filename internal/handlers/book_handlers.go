@@ -24,7 +24,12 @@ func BooksPOSTHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 		return
 	}
 
-	book := models.NewBook(request.Title, request.Pages)
+	fmt.Printf("title: %s\nmediaType: %s\nlength: %d",
+		request.Title,
+		request.MediaType,
+		request.Length)
+
+	book := models.NewBook(request.Title, request.MediaType, request.Length)
 
 	util.WriteJSON(w, http.StatusCreated, book)
 }
