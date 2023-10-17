@@ -2,39 +2,29 @@ package data
 
 import (
 	"database/sql"
+
 	_ "github.com/lib/pq"
 
 	"github.com/umizu/yomu/internal/models"
 )
 
-type Store interface {
+type BookStore interface {
 	CreateBook(*models.Book) error
 	GetBookById(id string) (*models.Book, error)
 	GetAllBooks() ([]*models.Book, error)
 }
 
-type PostgresStore struct {
+type PostgresBookStore struct {
 	db *sql.DB
 }
 
-func NewPostgresStore() (*PostgresStore, error) {
-	connStr := "postgres://postgres:yomu@localhost:7000?sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return &PostgresStore{
+func NewPostgresBookStore(db *sql.DB) *PostgresBookStore {
+	return &PostgresBookStore{
 		db: db,
-	}, nil
+	}
 }
 
-func (s *PostgresStore) CreateBook(book *models.Book) error {
+func (s *PostgresBookStore) CreateBook(book *models.Book) error {
 	_, err := s.db.Exec(`
 		INSERT INTO book (id, title, mediaType, length)
 		VALUES ($1, $2, $3, $4)
@@ -43,7 +33,7 @@ func (s *PostgresStore) CreateBook(book *models.Book) error {
 	return err
 }
 
-func (s *PostgresStore) GetBookById(id string) (*models.Book, error) {
+func (s *PostgresBookStore) GetBookById(id string) (*models.Book, error) {
 	row := s.db.QueryRow(`
 		SELECT id, title, mediaType, length
 		FROM book
@@ -59,7 +49,7 @@ func (s *PostgresStore) GetBookById(id string) (*models.Book, error) {
 	return &book, nil
 }
 
-func (s *PostgresStore) GetAllBooks() ([]*models.Book, error) {
+func (s *PostgresBookStore) GetAllBooks() ([]*models.Book, error) {
 	rows, err := s.db.Query(`
 		SELECT id, title, mediaType, length
 		FROM book

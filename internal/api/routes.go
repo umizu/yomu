@@ -1,18 +1,14 @@
 package api
 
 import (
-	"net/http"
+	"database/sql"
 
-	"github.com/julienschmidt/httprouter"
-	"github.com/umizu/yomu/internal/handlers"
+	"github.com/umizu/yomu/internal/data"
 )
 
-func (s *APIServer) RegisterBookRoutes() {
-	s.router.GET("/books", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		handlers.BooksGETHandler(w, r, p, s.db)
-	})
-	
-	s.router.POST("/books", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		handlers.BooksPOSTHandler(w, r, p, s.db)
-	})
+func (s *APIServer) RegisterBookRoutes(db *sql.DB) {
+
+	bookHandler := NewBookHandler(data.NewPostgresBookStore(db))
+	s.router.GET("/books", bookHandler.BooksGETHandler)
+	s.router.POST("/books", bookHandler.BooksPOSTHandler)
 }

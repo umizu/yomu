@@ -1,40 +1,36 @@
 package api
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"database/sql"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/labstack/echo/v4"
 	"github.com/umizu/yomu/internal/data"
 )
 
 type APIServer struct {
 	listenAddr string
-	router     *httprouter.Router
-	db         data.Store
+	db         *sql.DB
+	router     *echo.Echo
 }
 
 func NewAPIServer(listenAddr string) (*APIServer, error) {
-	db, err := data.NewPostgresStore()
+	pgStore, err := data.NewPostgresStore()
 	if err != nil {
 		return nil, err
 	}
 
-	err = db.Init()
-	if err != nil {
+	if err := pgStore.Init(); err != nil {
 		return nil, err
 	}
 
 	return &APIServer{
 		listenAddr: listenAddr,
-		router:     httprouter.New(),
-		db:         db,
+		db: 	   pgStore.DB,
+		router:     echo.New(),
 	}, nil
 }
 
 func (s *APIServer) Run() {
-	s.RegisterBookRoutes()
-	fmt.Printf("Server listening on http://localhost%s\n", s.listenAddr)
-	log.Fatal(http.ListenAndServe(s.listenAddr, s.router))
+	s.RegisterBookRoutes(s.db)
+	s.router.Logger.Fatal(s.router.Start(s.listenAddr))
 }
