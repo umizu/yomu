@@ -59,7 +59,7 @@ func (s *PostgresBookStore) GetAllBooks() ([]*models.Book, error) {
 		return nil, err
 	}
 
-	var books []*models.Book
+	books := []*models.Book{}
 
 	for rows.Next() {
 		var book models.Book
