@@ -29,12 +29,14 @@ func (h *BookHandler) BooksGETHandler(c echo.Context) error {
 }
 
 func (h *BookHandler) BooksPOSTHandler(c echo.Context) error {
-	var request contracts.BookRequest
+	var request contracts.CreateBookRequest
 	if err := json.NewDecoder(c.Request().Body).Decode(&request); err != nil {
 		return err
 	}
-
-	book := models.NewBook(request.Title, request.MediaType, request.Length)
+	if err := request.Validate(); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+	book := models.NewBookFromRequest(request)
 	if err := h.bookStore.CreateBook(book); err != nil {
 		return err
 	}

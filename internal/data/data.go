@@ -3,7 +3,7 @@ package data
 import "database/sql"
 
 const (
-	connStr = "postgres://postgres:yomu@localhost:7000?sslmode=disable"
+	connStr = "postgres://postgres:yomu@localhost:9000?sslmode=disable"
 )
 
 type Store interface {
@@ -22,7 +22,7 @@ func NewPostgresStore() (*PostgresStore, error) {
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
-	
+
 	return &PostgresStore{
 		DB: db,
 	}, nil
@@ -33,8 +33,10 @@ func (s *PostgresStore) Init() error {
 		CREATE TABLE IF NOT EXISTS book (
 			id UUID PRIMARY KEY,
 			title TEXT,
-			mediaType TEXT,
-			length INT)
+			isbn TEXT,
+			format TEXT,
+			link TEXT,
+			language TEXT)
 	`)
 	return err
 }

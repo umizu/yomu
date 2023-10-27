@@ -2,20 +2,25 @@ package models
 
 import (
 	"github.com/google/uuid"
+	"github.com/umizu/yomu/pkg/contracts"
 )
 
 type Book struct {
-	Id        string `json:"id"`
-	Title     string `json:"title"`
-	MediaType string `json:"mediaType"`
-	Length    int    `json:"length"`
+	Id       string `json:"id"`
+	Title    string `json:"title"`
+	Isbn     string `json:"isbn"`
+	Format   string `json:"format"`
+	Link     string `json:"link"`
+	Language string `json:"language"`
 }
 
-func NewBook(title string, mediaType string, length int) *Book {
+func NewBookFromRequest(req contracts.CreateBookRequest) *Book {
 	return &Book{
-		Id:        uuid.NewString(),
-		Title:     title,
-		MediaType: mediaType,
-		Length:    length,
+		Id:       uuid.NewString(),
+		Title:    req.Title,
+		Isbn:     req.Isbn,
+		Format:   req.Format,
+		Link:     req.Link,
+		Language: req.Language,
 	}
 }
