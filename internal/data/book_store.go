@@ -4,14 +4,13 @@ import (
 	"database/sql"
 
 	_ "github.com/lib/pq"
-
-	"github.com/umizu/yomu/internal/models"
+	"github.com/umizu/yomu/internal/types"
 )
 
 type BookStore interface {
-	CreateBook(*models.Book) error
-	GetBookById(id string) (*models.Book, error)
-	GetAllBooks() ([]*models.Book, error)
+	CreateBook(*types.Book) error
+	GetBookById(id string) (*types.Book, error)
+	GetAllBooks() ([]*types.Book, error)
 }
 
 type PostgresBookStore struct {
@@ -24,7 +23,7 @@ func NewPostgresBookStore(db *sql.DB) *PostgresBookStore {
 	}
 }
 
-func (s *PostgresBookStore) CreateBook(book *models.Book) error {
+func (s *PostgresBookStore) CreateBook(book *types.Book) error {
 	_, err := s.db.Exec(`
 		INSERT INTO book (id, title, isbn, format, link, language)
 		VALUES ($1, $2, $3, $4, $5, $6)
@@ -33,14 +32,14 @@ func (s *PostgresBookStore) CreateBook(book *models.Book) error {
 	return err
 }
 
-func (s *PostgresBookStore) GetBookById(id string) (*models.Book, error) {
+func (s *PostgresBookStore) GetBookById(id string) (*types.Book, error) {
 	row := s.db.QueryRow(`
 		SELECT id, title, isbn, format, link, language
 		FROM book
 		WHERE id = $1
 	`, id)
 
-	var book models.Book
+	var book types.Book
 
 	if err := row.Scan(&book.Id, &book.Title, &book.Isbn, &book.Format, &book.Isbn, &book.Link, &book.Language); err != nil {
 		return nil, err
@@ -49,7 +48,7 @@ func (s *PostgresBookStore) GetBookById(id string) (*models.Book, error) {
 	return &book, nil
 }
 
-func (s *PostgresBookStore) GetAllBooks() ([]*models.Book, error) {
+func (s *PostgresBookStore) GetAllBooks() ([]*types.Book, error) {
 	rows, err := s.db.Query(`
 		SELECT id, title, isbn, format, link, language
 		FROM book
@@ -59,10 +58,10 @@ func (s *PostgresBookStore) GetAllBooks() ([]*models.Book, error) {
 		return nil, err
 	}
 
-	books := []*models.Book{}
+	books := []*types.Book{}
 
 	for rows.Next() {
-		var book models.Book
+		var book types.Book
 
 		if err := rows.Scan(&book.Id, &book.Title, &book.Isbn, &book.Format, &book.Link, &book.Language); err != nil {
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/umizu/yomu/internal/data"
-	"github.com/umizu/yomu/internal/models"
+	"github.com/umizu/yomu/internal/types"
 	"github.com/umizu/yomu/pkg/contracts"
 )
 
@@ -36,7 +36,7 @@ func (h *BookHandler) BooksPOSTHandler(c echo.Context) error {
 	if err := request.Validate(); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	book := models.NewBookFromRequest(request)
+	book := types.NewBookFromRequest(request)
 	if err := h.bookStore.CreateBook(book); err != nil {
 		return err
 	}
