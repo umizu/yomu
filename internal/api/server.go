@@ -33,12 +33,17 @@ func NewAPIServer(listenAddr string) (*APIServer, error) {
 
 func (s *APIServer) Run() {
 	s.router.HTTPErrorHandler = customHTTPErrorHandler
-
-	s.RegisterBookRoutes(s.db)
+	s.RegisterBookRoutes()
+	s.RegisterBookStatusRoutes()
 	s.router.Logger.Fatal(s.router.Start(s.listenAddr))
 }
 
 func customHTTPErrorHandler(err error, c echo.Context) {
 	c.Logger().Error(err)
+
+	if err == echo.ErrNotFound {
+		c.JSON(http.StatusNotFound, map[string]string{"error": "path not found"})
+		return
+	}
 	c.JSON(http.StatusInternalServerError, map[string]string{"error": "internal server error"})
 }

@@ -29,7 +29,7 @@ func NewPostgresStore() (*PostgresStore, error) {
 }
 
 func (s *PostgresStore) Init() error {
-	_, err := s.DB.Exec(`
+	if _, err := s.DB.Exec(`
 		CREATE TABLE IF NOT EXISTS book (
 			id UUID PRIMARY KEY,
 			title TEXT,
@@ -37,6 +37,17 @@ func (s *PostgresStore) Init() error {
 			format TEXT,
 			link TEXT,
 			language TEXT)
-	`)
-	return err
+	`); err != nil {
+		return err
+	}
+
+	if _, err := s.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS book_status (
+			id UUID PRIMARY KEY,
+			book_id UUID REFERENCES book(id),
+			status INT)
+	`); err != nil {
+		return err
+	}
+	return nil
 }
