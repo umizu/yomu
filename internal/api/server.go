@@ -34,7 +34,7 @@ func NewAPIServer(listenAddr string) (*APIServer, error) {
 func (s *APIServer) Run() {
 	s.router.HTTPErrorHandler = customHTTPErrorHandler
 	s.RegisterBookRoutes()
-	s.RegisterBookStatusRoutes()
+	s.RegisterLibraryItemRoutes()
 	s.router.Logger.Fatal(s.router.Start(s.listenAddr))
 }
 

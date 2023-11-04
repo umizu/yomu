@@ -11,8 +11,8 @@ func (s *APIServer) RegisterBookRoutes() {
 	s.router.POST("/books", bookHandler.BooksPOSTHandler)
 }
 
-func (s *APIServer) RegisterBookStatusRoutes() {
-	bookStatusHandler := handlers.NewBookStatusHandler(data.NewPostgresBookStatusStore(s.db))
-	s.router.GET("/bookStatuses", bookStatusHandler.BookStatusGETHandler)
-	s.router.POST("/bookStatuses", bookStatusHandler.BookStatusPOSTHandler)
+func (s *APIServer) RegisterLibraryItemRoutes() {
+	libraryItemHandler := handlers.NewLibraryItemHandler(data.NewPostgresLibraryItemStore(s.db))
+	s.router.GET("/libraryItems", libraryItemHandler.LibraryItemGETHandler)
+	s.router.POST("/libraryItems", libraryItemHandler.LibraryItemPOSTHandler)
 }

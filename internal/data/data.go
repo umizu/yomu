@@ -42,7 +42,7 @@ func (s *PostgresStore) Init() error {
 	}
 
 	if _, err := s.DB.Exec(`
-		CREATE TABLE IF NOT EXISTS book_status (
+		CREATE TABLE IF NOT EXISTS library_item (
 			id UUID PRIMARY KEY,
 			book_id UUID REFERENCES book(id),
 			status INT)

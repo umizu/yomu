@@ -53,23 +53,17 @@ func (s *PostgresBookStore) GetAllBooks() ([]*types.Book, error) {
 		SELECT id, title, isbn, format, link, language
 		FROM book
 	`)
-
 	if err != nil {
 		return nil, err
 	}
 
 	books := []*types.Book{}
-
 	for rows.Next() {
 		var book types.Book
-
 		if err := rows.Scan(&book.ID, &book.Title, &book.Isbn, &book.Format, &book.Link, &book.Language); err != nil {
-
 			return nil, err
 		}
-
 		books = append(books, &book)
 	}
-
 	return books, nil
 }

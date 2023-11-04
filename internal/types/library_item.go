@@ -1,6 +1,6 @@
 package types
 
-type BookStatus struct {
+type LibraryItem struct {
 	Id     string `json:"id"`
 	BookId string `json:"bookId"`
 	Status Status `json:"status"`
