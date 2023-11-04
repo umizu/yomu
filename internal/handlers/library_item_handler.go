@@ -24,7 +24,7 @@ func (h *LibraryItemHandler) LibraryItemGETHandler(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, libraryItems)
+	return c.JSON(http.StatusOK, types.ToResponse(libraryItems))
 }
 
 func (h *LibraryItemHandler) LibraryItemPOSTHandler(c echo.Context) error {
@@ -41,5 +41,5 @@ func (h *LibraryItemHandler) LibraryItemPOSTHandler(c echo.Context) error {
 	if err := h.libraryItemStore.Create(libraryItem); err != nil {
 		return err
 	}
-	return c.JSON(http.StatusCreated, libraryItem)
+	return c.JSON(http.StatusCreated, libraryItem.ToResponse())
 }

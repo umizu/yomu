@@ -22,10 +22,26 @@ const (
 
 func NewLibraryItemFromRequest(req contracts.CreateLibraryItemRequest) *LibraryItem {
 	return &LibraryItem{
-		Id:   uuid.NewString(),
+		Id:     uuid.NewString(),
 		BookId: req.BookId,
 		Status: ParseStatus(req.Status),
 	}
+}
+
+func (li *LibraryItem) ToResponse() contracts.LibraryItemResponse {
+	return contracts.LibraryItemResponse{
+		Id:     li.Id,
+		BookId: li.BookId,
+		Status: li.Status.String(),
+	}
+}
+
+func ToResponse(li []*LibraryItem) []contracts.LibraryItemResponse {
+	var resp []contracts.LibraryItemResponse
+	for _, item := range li {
+		resp = append(resp, item.ToResponse())
+	}
+	return resp
 }
 
 func ParseStatus(status string) Status {

@@ -14,6 +14,12 @@ type CreateLibraryItemRequest struct {
 	Status string `json:"status"`
 }
 
+type LibraryItemResponse struct {
+	Id     string `json:"id"`
+	BookId string `json:"bookId"`
+	Status string `json:"status"`
+}
+
 func (r CreateLibraryItemRequest) Validate() error {
 	if r.BookId == "" {
 		return ErrInvalidLibraryItemBookId
