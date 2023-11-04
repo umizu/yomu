@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -30,7 +29,7 @@ func (h *BookHandler) BooksGETHandler(c echo.Context) error {
 
 func (h *BookHandler) BooksPOSTHandler(c echo.Context) error {
 	var request contracts.CreateBookRequest
-	if err := json.NewDecoder(c.Request().Body).Decode(&request); err != nil {
+	if err := c.Bind(&request); err != nil {
 		return err
 	}
 	if err := request.Validate(); err != nil {

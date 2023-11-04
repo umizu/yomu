@@ -12,4 +12,5 @@ const (
 	Planning Status = iota
 	Reading
 	Completed
+	Dropped
 )
