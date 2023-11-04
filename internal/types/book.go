@@ -6,7 +6,7 @@ import (
 )
 
 type Book struct {
-	Id       string `json:"id"`
+	ID       string `json:"id"`
 	Title    string `json:"title"`
 	Isbn     string `json:"isbn"`
 	Format   string `json:"format"`
@@ -16,7 +16,7 @@ type Book struct {
 
 func NewBookFromRequest(req contracts.CreateBookRequest) *Book {
 	return &Book{
-		Id:       uuid.NewString(),
+		ID:       uuid.NewString(),
 		Title:    req.Title,
 		Isbn:     req.Isbn,
 		Format:   req.Format,

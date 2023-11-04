@@ -27,7 +27,7 @@ func (s *PostgresBookStore) CreateBook(book *types.Book) error {
 	_, err := s.db.Exec(`
 		INSERT INTO book (id, title, isbn, format, link, language)
 		VALUES ($1, $2, $3, $4, $5, $6)
-	`, book.Id, book.Title, book.Isbn, book.Format, book.Link, book.Language)
+	`, book.ID, book.Title, book.Isbn, book.Format, book.Link, book.Language)
 
 	return err
 }
@@ -41,7 +41,7 @@ func (s *PostgresBookStore) GetBookById(id string) (*types.Book, error) {
 
 	var book types.Book
 
-	if err := row.Scan(&book.Id, &book.Title, &book.Isbn, &book.Format, &book.Isbn, &book.Link, &book.Language); err != nil {
+	if err := row.Scan(&book.ID, &book.Title, &book.Isbn, &book.Format, &book.Isbn, &book.Link, &book.Language); err != nil {
 		return nil, err
 	}
 
@@ -63,7 +63,7 @@ func (s *PostgresBookStore) GetAllBooks() ([]*types.Book, error) {
 	for rows.Next() {
 		var book types.Book
 
-		if err := rows.Scan(&book.Id, &book.Title, &book.Isbn, &book.Format, &book.Link, &book.Language); err != nil {
+		if err := rows.Scan(&book.ID, &book.Title, &book.Isbn, &book.Format, &book.Link, &book.Language); err != nil {
 
 			return nil, err
 		}
