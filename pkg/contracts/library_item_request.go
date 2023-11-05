@@ -2,10 +2,12 @@ package contracts
 
 import (
 	"errors"
+
+	util "github.com/umizu/yomu/internal/utils"
 )
 
 var (
-	ErrInvalidLibraryItemBookId = errors.New("invalid library item book id")
+	ErrInvalidLibraryItemBookId = errors.New("invalid uuid format for bookId")
 	ErrInvalidStatus            = errors.New("invalid status")
 )
 
@@ -21,7 +23,7 @@ type LibraryItemResponse struct {
 }
 
 func (r CreateLibraryItemRequest) Validate() error {
-	if r.BookId == "" {
+	if !util.IsValidUUID(r.BookId) {
 		return ErrInvalidLibraryItemBookId
 	}
 	if r.Status != "Planning" && r.Status != "Reading" && r.Status != "Completed" && r.Status != "Dropped" {

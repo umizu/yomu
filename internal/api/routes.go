@@ -5,14 +5,15 @@ import (
 	"github.com/umizu/yomu/internal/handlers"
 )
 
-func (s *APIServer) RegisterBookRoutes() {
-	bookHandler := handlers.NewBookHandler(data.NewPostgresBookStore(s.db))
+func (s *APIServer) RegisterRoutes() {
+	bookStore := data.NewPostgresBookStore(s.db)
+	libraryItemStore := data.NewPostgresLibraryItemStore(s.db)
+
+	bookHandler := handlers.NewBookHandler(bookStore)
+	libraryItemHandler := handlers.NewLibraryItemHandler(libraryItemStore, bookStore)
+
 	s.router.GET("/books", bookHandler.BooksGETHandler)
 	s.router.POST("/books", bookHandler.BooksPOSTHandler)
-}
-
-func (s *APIServer) RegisterLibraryItemRoutes() {
-	libraryItemHandler := handlers.NewLibraryItemHandler(data.NewPostgresLibraryItemStore(s.db))
 	s.router.GET("/libraryItems", libraryItemHandler.LibraryItemGETHandler)
 	s.router.POST("/libraryItems", libraryItemHandler.LibraryItemPOSTHandler)
 }

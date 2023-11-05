@@ -11,11 +11,13 @@ import (
 
 type LibraryItemHandler struct {
 	libraryItemStore data.LibraryItemStore
+	bookStore        data.BookStore
 }
 
-func NewLibraryItemHandler(libraryItemStore data.LibraryItemStore) *LibraryItemHandler {
+func NewLibraryItemHandler(lStore data.LibraryItemStore, bStore data.BookStore) *LibraryItemHandler {
 	return &LibraryItemHandler{
-		libraryItemStore: libraryItemStore,
+		libraryItemStore: lStore,
+		bookStore:        bStore,
 	}
 }
 
@@ -32,9 +34,16 @@ func (h *LibraryItemHandler) LibraryItemPOSTHandler(c echo.Context) error {
 	if err := c.Bind(&req); err != nil {
 		return err
 	}
-
 	if err := req.Validate(); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	book, err := h.bookStore.GetBookById(req.BookId)
+	if err != nil {
+		return err
+	}
+	if book == nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "book not found"})
 	}
 
 	libraryItem := types.NewLibraryItemFromRequest(req)

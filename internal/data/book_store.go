@@ -41,8 +41,13 @@ func (s *PostgresBookStore) GetBookById(id string) (*types.Book, error) {
 
 	var book types.Book
 
-	if err := row.Scan(&book.ID, &book.Title, &book.Isbn, &book.Format, &book.Isbn, &book.Link, &book.Language); err != nil {
-		return nil, err
+	if err := row.Scan(&book.ID, &book.Title, &book.Format, &book.Isbn, &book.Link, &book.Language); err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			return nil, nil
+		default:
+			return nil, err
+		}
 	}
 
 	return &book, nil
