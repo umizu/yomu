@@ -29,8 +29,8 @@ func (h *LibraryItemHandler) LibraryItemGETHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, types.ToResponse(libraryItems))
 }
 
-func (h *LibraryItemHandler) LibraryItemPOSTHandler(c echo.Context) error {
-	var req contracts.CreateLibraryItemRequest
+func (h *LibraryItemHandler) LibraryItemPUTHandler(c echo.Context) error {
+	var req contracts.UpsertLibraryItemRequest
 	if err := c.Bind(&req); err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (h *LibraryItemHandler) LibraryItemPOSTHandler(c echo.Context) error {
 	}
 
 	libraryItem := types.NewLibraryItemFromRequest(req)
-	if err := h.libraryItemStore.Create(libraryItem); err != nil {
+	if err := h.libraryItemStore.Upsert(libraryItem); err != nil {
 		return err
 	}
 	return c.JSON(http.StatusCreated, libraryItem.ToResponse())

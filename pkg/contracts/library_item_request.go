@@ -11,7 +11,7 @@ var (
 	ErrInvalidStatus            = errors.New("invalid status")
 )
 
-type CreateLibraryItemRequest struct {
+type UpsertLibraryItemRequest struct {
 	BookId string `json:"bookId"`
 	Status string `json:"status"`
 }
@@ -22,7 +22,7 @@ type LibraryItemResponse struct {
 	Status string `json:"status"`
 }
 
-func (r CreateLibraryItemRequest) Validate() error {
+func (r UpsertLibraryItemRequest) Validate() error {
 	if !util.IsValidUUID(r.BookId) {
 		return ErrInvalidLibraryItemBookId
 	}

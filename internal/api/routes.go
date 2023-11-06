@@ -15,5 +15,5 @@ func (s *APIServer) RegisterRoutes() {
 	s.router.GET("/books", bookHandler.BooksGETHandler)
 	s.router.POST("/books", bookHandler.BooksPOSTHandler)
 	s.router.GET("/libraryItems", libraryItemHandler.LibraryItemGETHandler)
-	s.router.POST("/libraryItems", libraryItemHandler.LibraryItemPOSTHandler)
+	s.router.PUT("/libraryItems", libraryItemHandler.LibraryItemPUTHandler)
 }

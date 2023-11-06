@@ -20,7 +20,7 @@ const (
 	Dropped
 )
 
-func NewLibraryItemFromRequest(req contracts.CreateLibraryItemRequest) *LibraryItem {
+func NewLibraryItemFromRequest(req contracts.UpsertLibraryItemRequest) *LibraryItem {
 	return &LibraryItem{
 		Id:     uuid.NewString(),
 		BookId: req.BookId,
@@ -37,7 +37,7 @@ func (li *LibraryItem) ToResponse() contracts.LibraryItemResponse {
 }
 
 func ToResponse(li []*LibraryItem) []contracts.LibraryItemResponse {
-	var resp []contracts.LibraryItemResponse
+	resp := []contracts.LibraryItemResponse{}
 	for _, item := range li {
 		resp = append(resp, item.ToResponse())
 	}
