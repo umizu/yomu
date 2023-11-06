@@ -17,7 +17,6 @@ type UpsertLibraryItemRequest struct {
 }
 
 type LibraryItemResponse struct {
-	Id     string `json:"id"`
 	BookId string `json:"bookId"`
 	Status string `json:"status"`
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/umizu/yomu/internal/data"
+	"github.com/umizu/yomu/internal/events"
 	"github.com/umizu/yomu/internal/types"
 	"github.com/umizu/yomu/pkg/contracts"
 )
@@ -50,5 +51,7 @@ func (h *LibraryItemHandler) LibraryItemPUTHandler(c echo.Context) error {
 	if err := h.libraryItemStore.Upsert(libraryItem); err != nil {
 		return err
 	}
+
+	events.LibraryItemCh <- events.LibraryItemUpsertedEvent{Message: "todo: implement event"}
 	return c.JSON(http.StatusCreated, libraryItem.ToResponse())
 }

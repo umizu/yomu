@@ -11,15 +11,6 @@ type LibraryItem struct {
 	Status Status `json:"status"`
 }
 
-type Status int
-
-const (
-	Planning Status = iota
-	Reading
-	Completed
-	Dropped
-)
-
 func NewLibraryItemFromRequest(req contracts.UpsertLibraryItemRequest) *LibraryItem {
 	return &LibraryItem{
 		Id:     uuid.NewString(),
@@ -30,7 +21,6 @@ func NewLibraryItemFromRequest(req contracts.UpsertLibraryItemRequest) *LibraryI
 
 func (li *LibraryItem) ToResponse() contracts.LibraryItemResponse {
 	return contracts.LibraryItemResponse{
-		Id:     li.Id,
 		BookId: li.BookId,
 		Status: li.Status.String(),
 	}

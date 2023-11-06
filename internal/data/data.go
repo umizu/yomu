@@ -32,7 +32,7 @@ func (s *PostgresStore) Init() error {
 	if _, err := s.DB.Exec(`
 		CREATE TABLE IF NOT EXISTS book (
 			id UUID PRIMARY KEY,
-			title TEXT,
+			title TEXT NOT NULL,
 			isbn TEXT,
 			format TEXT,
 			link TEXT,
@@ -44,8 +44,17 @@ func (s *PostgresStore) Init() error {
 	if _, err := s.DB.Exec(`
 		CREATE TABLE IF NOT EXISTS library_item (
 			id UUID PRIMARY KEY,
-			book_id UUID REFERENCES book(id),
-			status INT)
+			book_id UUID REFERENCES book(id) NOT NULL,
+			status INT NOT NULL)
+	`); err != nil {
+		return err
+	}
+	
+	if _, err := s.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS activity (
+			id UUID PRIMARY KEY,
+			book_id UUID REFERENCES book(id) NOT NULL,
+			status INT NOT NULL)
 	`); err != nil {
 		return err
 	}
