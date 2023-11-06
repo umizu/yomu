@@ -1,5 +1,4 @@
 # yomu
 
 yomu is the japanese verb for "read".
-
-よろしくです。
+rewrite/continuation of [reading-radar](https://github.com/KaishiCo/reading-radar)
