@@ -3,13 +3,13 @@ package data
 import (
 	"database/sql"
 
-	"github.com/umizu/yomu/internal/types"
+	"github.com/umizu/yomu/internal/models"
 )
 
 type LibraryItemStore interface {
-	Upsert(*types.LibraryItem) error
-	GetAll() ([]*types.LibraryItem, error)
-	GetByBookId(string) (*types.LibraryItem, error)
+	Upsert(*models.LibraryItem) error
+	GetAll() ([]*models.LibraryItem, error)
+	GetByBookId(string) (*models.LibraryItem, error)
 }
 
 type PostgresLibraryItemStore struct {
@@ -20,7 +20,7 @@ func NewPostgresLibraryItemStore(db *sql.DB) *PostgresLibraryItemStore {
 	return &PostgresLibraryItemStore{db: db}
 }
 
-func (s *PostgresLibraryItemStore) Upsert(item *types.LibraryItem) error {
+func (s *PostgresLibraryItemStore) Upsert(item *models.LibraryItem) error {
 	existingItem, err := s.GetByBookId(item.BookId)
 	if err != nil {
 		return err
@@ -40,16 +40,16 @@ func (s *PostgresLibraryItemStore) Upsert(item *types.LibraryItem) error {
 	return nil
 }
 
-func (s *PostgresLibraryItemStore) GetAll() ([]*types.LibraryItem, error) {
+func (s *PostgresLibraryItemStore) GetAll() ([]*models.LibraryItem, error) {
 	rows, err := s.db.Query("SELECT id, book_id, status FROM library_item")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	libraryItems := []*types.LibraryItem{}
+	libraryItems := []*models.LibraryItem{}
 	for rows.Next() {
-		items := &types.LibraryItem{}
+		items := &models.LibraryItem{}
 		if err := rows.Scan(&items.Id, &items.BookId, &items.Status); err != nil {
 			return nil, err
 		}
@@ -58,9 +58,9 @@ func (s *PostgresLibraryItemStore) GetAll() ([]*types.LibraryItem, error) {
 	return libraryItems, nil
 }
 
-func (s *PostgresLibraryItemStore) GetByBookId(bookId string) (*types.LibraryItem, error) {
+func (s *PostgresLibraryItemStore) GetByBookId(bookId string) (*models.LibraryItem, error) {
 	row := s.db.QueryRow("SELECT id, book_id, status FROM library_item WHERE book_id = $1", bookId)
-	item := &types.LibraryItem{}
+	item := &models.LibraryItem{}
 	err := row.Scan(&item.Id, &item.BookId, &item.Status)
 	if err == sql.ErrNoRows {
 		return nil, nil

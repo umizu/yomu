@@ -1,4 +1,4 @@
-package types
+package models
 
 type Activity struct {
 	Id     string `json:"id"`

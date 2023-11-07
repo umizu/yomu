@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/umizu/yomu/internal/data"
 	"github.com/umizu/yomu/internal/events"
-	"github.com/umizu/yomu/internal/types"
+	"github.com/umizu/yomu/internal/models"
 	"github.com/umizu/yomu/pkg/contracts"
 )
 
@@ -27,7 +27,7 @@ func (h *LibraryItemHandler) LibraryItemGETHandler(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, types.ToResponse(libraryItems))
+	return c.JSON(http.StatusOK, models.ToResponse(libraryItems))
 }
 
 func (h *LibraryItemHandler) LibraryItemPUTHandler(c echo.Context) error {
@@ -47,7 +47,7 @@ func (h *LibraryItemHandler) LibraryItemPUTHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "book not found"})
 	}
 
-	libraryItem := types.NewLibraryItemFromRequest(req)
+	libraryItem := models.NewLibraryItemFromRequest(req)
 	if err := h.libraryItemStore.Upsert(libraryItem); err != nil {
 		return err
 	}
