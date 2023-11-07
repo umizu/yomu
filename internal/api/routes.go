@@ -10,13 +10,11 @@ func (s *APIServer) RegisterRoutes() {
 	bookStore := data.NewPostgresBookStore(s.db)
 	libraryItemStore := data.NewPostgresLibraryItemStore(s.db)
 
+	messagech := make(chan interface{})
 	bookHandler := handlers.NewBookHandler(bookStore)
-	libraryItemHandler := handlers.NewLibraryItemHandler(libraryItemStore, bookStore)
+	libraryItemHandler := handlers.NewLibraryItemHandler(libraryItemStore, bookStore, messagech)
 
-	// testing
-	libraryItemListener := &events.LibraryItemEventListener{ID: 1}
-	go libraryItemListener.Listen(events.LibraryItemCh)
-	//////////
+	go events.Listen(messagech)
 
 	s.router.GET("/books", bookHandler.BooksGETHandler)
 	s.router.POST("/books", bookHandler.BooksPOSTHandler)
