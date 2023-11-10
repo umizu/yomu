@@ -6,12 +6,14 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/umizu/yomu/internal/data"
+	"github.com/umizu/yomu/internal/events"
 )
 
 type APIServer struct {
 	listenAddr string
 	db         *sql.DB
 	router     *echo.Echo
+	msgch      chan interface{}
 }
 
 func NewAPIServer(listenAddr string) (*APIServer, error) {
@@ -28,11 +30,13 @@ func NewAPIServer(listenAddr string) (*APIServer, error) {
 		listenAddr: listenAddr,
 		db:         pgStore.DB,
 		router:     echo.New(),
+		msgch:      make(chan interface{}),
 	}, nil
 }
 
 func (s *APIServer) Run() {
 	s.router.HTTPErrorHandler = customHTTPErrorHandler
+	go events.Listen(s.msgch)
 	s.RegisterRoutes()
 	s.router.Logger.Fatal(s.router.Start(s.listenAddr))
 }

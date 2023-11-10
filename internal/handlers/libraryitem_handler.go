@@ -11,16 +11,16 @@ import (
 )
 
 type LibraryItemHandler struct {
-	liStore data.LibraryItemStore
-	bookStore        data.BookStore
-	eventch          chan interface{}
+	liStore   data.LibraryItemStore
+	bookStore data.BookStore
+	msgch   chan interface{}
 }
 
-func NewLibraryItemHandler(lStore data.LibraryItemStore, bStore data.BookStore, eventch chan interface{}) *LibraryItemHandler {
+func NewLibraryItemHandler(lStore data.LibraryItemStore, bStore data.BookStore, msgch chan interface{}) *LibraryItemHandler {
 	return &LibraryItemHandler{
-		liStore: lStore,
-		bookStore:        bStore,
-		eventch:          eventch,
+		liStore:   lStore,
+		bookStore: bStore,
+		msgch:   msgch,
 	}
 }
 
@@ -54,6 +54,6 @@ func (h *LibraryItemHandler) LibraryItemPUTHandler(c echo.Context) error {
 		return err
 	}
 
-	h.eventch <- events.LibraryItemUpsertedEvent{Message: "libraryitem has been upserted!", Store: h.liStore}
+	h.msgch <- events.LibraryItemUpsertedEvent{Message: "libraryitem has been upserted!", Store: h.liStore}
 	return c.JSON(http.StatusCreated, libraryItem.ToResponse())
 }
